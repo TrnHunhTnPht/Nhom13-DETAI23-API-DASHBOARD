@@ -1,30 +1,55 @@
-name: Advanced deploy
+name: Deploy with Docker Compose
+
 on:
   push:
-    branches: [ main ]
-
-permissions:
-  contents: read
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  EC2-Deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-      url: ${{ steps.deploy.outputs.vm_url }}
     steps:
-    - id: deploy
-      name: Deploy
-      uses: bitovi/github-actions-deploy-docker-to-ec2@v0.5.0
-      with:
-        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
-        aws_default_region: us-east-1
-        domain_name: bitovi.com
-        sub_domain: app
-        tf_state_bucket: my-terraform-state-bucket
-        dot_env: ${{ secrets.DOT_ENV }}
-        ghv_env: ${{ vars.VARS }}
-        app_port: 3000
-        additional_tags: "{\"key1\": \"value1\",\"key2\": \"value2\"}"
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Setup Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push <YOUR_IMAGE>
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          cache-from: type=gha,scope=<YOUR_IMAGE>
+          cache-to: type=gha,scope=<YOUR_IMAGE>
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:<YOUR_IMAGE>-${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:<YOUR_IMAGE>-latest
+
+      - name: Install Docker Compose
+        run: curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+
+      - name: Docker context
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          docker context create ecs ecs-context --from-env
+          docker --context ecs-context compose up
