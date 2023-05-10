@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  app:
+    container_name: frontend-vuejs
+    build: .
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"

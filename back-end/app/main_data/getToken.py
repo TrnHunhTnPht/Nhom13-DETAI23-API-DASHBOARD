@@ -1,5 +1,7 @@
 import requests
 import json
+from types import SimpleNamespace
+
 
 url = "https://cads-api.fpt.vn/fiber-detection/v2/getToken"
 
@@ -12,6 +14,8 @@ headers = {
 }
 
 response = requests.request("POST", url, headers=headers, data=payload)
+x = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
 
-print(response.text)
+token = x.access_token
+
 
