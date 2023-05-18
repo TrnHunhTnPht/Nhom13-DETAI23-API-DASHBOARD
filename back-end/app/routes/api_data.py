@@ -17,6 +17,8 @@ import pandas as pd
 import io
 from UliPlot.XLSX import auto_adjust_xlsx_column_width
 
+import numpy as np
+
 
 app_router = APIRouter()
 
@@ -29,66 +31,6 @@ for i in range(0, 7):
 @app_router.get("/chart-data", dependencies=[Depends(JWTBearer())])
 async def chart_data():
     return {"count": times, "stateOk": stateOk, "stateFail": stateFail}
-
-
-@app_router.get("/today-users", dependencies=[Depends(JWTBearer())])
-async def today_users():
-    allUsers = usersEntity(db.find())
-    countUserToday = 0
-    countUserThisOneLastWeek = 0
-    pc = 0
-    total = True
-    for us in allUsers:
-        arrAccessed = us["accessed_at"]
-        for a in arrAccessed:
-            if a.date() == date.today():
-                countUserToday += 1
-            elif abs(date.today() - a.date()).days == 7:
-                countUserThisOneLastWeek += 1
-    if countUserThisOneLastWeek == 0:
-        pc = round((100 * (countUserToday / len(allUsers))), 2)
-    else:
-        total = False
-        pc = round(
-            100
-            * (countUserToday - countUserThisOneLastWeek)
-            / countUserThisOneLastWeek,
-            2,
-        )
-    return {
-        "todayUsers": (format(countUserToday, ",d")),
-        "percent": pc,
-        "total": total,
-    }
-
-
-@app_router.get("/new-clients", dependencies=[Depends(JWTBearer())])
-async def new_clients():
-    newClientsThisQuarter = 0
-    ClientsLastQuarter = 0
-    pc = 0
-    quarterNow = int(datetime.now().month) // 4 + 1
-    allUsers = usersEntity(db.find())
-
-    for u in allUsers:
-        quaterU = int(u["created_at"].month) // 4 + 1
-        if quaterU == quarterNow:
-            newClientsThisQuarter += 1
-        elif quarterU == quarterNow - 1:
-            ClientsLastQuarter += 1
-
-    if ClientsLastQuarter == 0:
-        pc = -1
-    else:
-        total = False
-        pc = round(
-            100 * (newClientsThisQuarter - ClientsLastQuarter) / ClientsLastQuarter, 2
-        )
-
-    return {
-        "newClients": (format(newClientsThisQuarter, ",d")),
-        "percent": pc,
-    }
 
 
 @app_router.get("/status-success", dependencies=[Depends(JWTBearer())])
@@ -107,7 +49,7 @@ async def get_inspection():
     return {"data": inspection}
 
 
-@app_router.get("/get-inspection-detail", dependencies=[Depends(JWTBearer())])
+@app_router.get("/get-inspection-detail")
 async def get_inspection_detail(id: str):
     try:
         detail_predict = []
@@ -130,7 +72,25 @@ async def get_inspection_detail(id: str):
                     "predict_result": temp["predict_result"],
                 }
             )
-        return {"angle_id": angid, "all_details": detail_predict}
+
+        # get labels
+        labels = dict()
+        if data[id]:
+            for item in data[id]:
+                result = data[id][item]
+                for i in result["predict_result"]:
+                    if i in labels:
+                        labels[i] += 1
+                    else:
+                        labels[i] = 1
+        else:
+            raise HTTPException(status_code=404, detail="Id invalid")
+
+        labels_key = sorted(labels)
+        result = []
+        for i in range(len(labels_key)):
+            result.append(labels[labels_key[i]])
+        return {"angle_id": angid, "all_details": detail_predict, "label": labels_key, "value": result}
     except:
         raise HTTPException(status_code=500)
 
@@ -183,3 +143,24 @@ async def download_api_data():
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": "attachment; filename=api_data.xlsx"},
     )
+
+
+@app_router.get("/id_statistic", dependencies=[Depends(JWTBearer())])
+async def id_statistic():
+
+    # get labels
+    labels = dict()
+    for i in data:
+        if i[0:3] in labels:
+            labels[i[0:3]] += 1
+        else:
+            labels[i[0:3]] = 1
+    value = []
+    label = sorted(labels)
+    for i in range(len(label)):
+        value.append(labels[label[i]])
+    return {"label": label, "value": value}
+
+
+# @app_router.get("/predict_result_statistic", dependencies=[Depends(JWTBearer())])
+# async def predict_result_statistic(id):
