@@ -9,7 +9,5 @@ services:
     volumes:
       - .:/app
       - /app/node_modules  
-    expose:
-      - "80"
     ports:
       - "8080:8080"
