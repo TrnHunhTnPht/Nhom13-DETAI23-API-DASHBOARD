@@ -1,6 +1,6 @@
 # API_DASHBOARD
-# Hướng dẫn chạy project trực tiếp tại 2 file README.md trong 2 thư mục front-end và back-end
-# Hướng dẫn deploy bằng lệnh docker-compose
+## Hướng dẫn chạy project trực tiếp tại 2 file README.md trong thư mục front-end và back-end
+## Hướng dẫn deploy bằng lệnh docker-compose
 ### Clone code
 ```
 git clone https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD.git
