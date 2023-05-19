@@ -19,7 +19,7 @@ docker info
 ### Mở terminal tại thư mục chứa code
 <img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/043470d2-664e-4068-9c94-9bbeb0d4aada">
 
-### Tiến hành deploy code 
+### Tiến hành deploy 
 ```
 docker-compose up --build
 ```
