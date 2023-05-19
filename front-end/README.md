@@ -1,6 +1,6 @@
 # api-dashboard-FrontEnd
 
-### Pre: [Nodejs](https://nodejs.org/en), npm , yarn
+### Cài trước: [Nodejs](https://nodejs.org/en), npm , yarn
 
 ## Project setup
 
@@ -26,14 +26,3 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-## Docker
-
-### Run Docker desktop
-
-```
-docker-compose up -d
-```
