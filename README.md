@@ -17,11 +17,18 @@ docker info
 <img width="682" alt="Check docker" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/4bb70fe7-2695-41d4-8899-1c4d29baa1ed">
 
 ### Mở terminal tại thư mục chứa code
+```
+cd Nhom13-DETAI23-API-DASHBOARD
+```
 <img width="682" alt="Mở terminal tại thư mục chứ code" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/043470d2-664e-4068-9c94-9bbeb0d4aada">
 
 ### Tiến hành deploy 
 ```
 docker-compose up --build
+```
+```
+Front-end: http://localhost:8080/
+Back-end: http://localhost:8000/docs
 ```
 <img width="682" alt="Tiến hành chạy lệnh docker-compose" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/7488da6b-ffd6-44a2-a7b1-38a169529ee8">
 <img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/816dca65-07cd-4967-b15b-4773539e4cb3">
