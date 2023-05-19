@@ -5,7 +5,7 @@
 ```
 git clone https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD.git
 ```
-### Chạy docker
+### Chạy **Docker desktop**
 ### Mở terminal tại thư mục chứa code
 ### Tiến hành deploy code 
 ```
