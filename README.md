@@ -7,10 +7,13 @@ git clone https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD.git
 ```
 <img width="682" alt="Clone code về máy" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/0eddb643-bd66-4420-9356-6d18ce704b7e">
 
-### Chạy <strong>Docker desktop</strong>
+### Mở Docker desktop
 <img width="1382" alt="Docker desktop" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/5051027a-c513-484b-ba2a-1b39a01ae538">
 
 ### Kiểm tra docker bằng terminal
+```
+docker info
+```
 <img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/4bb70fe7-2695-41d4-8899-1c4d29baa1ed">
 
 ### Mở terminal tại thư mục chứa code
@@ -22,6 +25,11 @@ docker-compose up --build
 ```
 <img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/7488da6b-ffd6-44a2-a7b1-38a169529ee8">
 
+<img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/816dca65-07cd-4967-b15b-4773539e4cb3">
+<img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/2254ac5d-d299-4043-a04c-b9c023126084">
+<img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/0fc77bdc-c27d-4a02-abfc-615939a97cd6">
+<img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/24d2968f-4e1a-4ad7-812b-af57c2e25bed">
+<img width="1680" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/1964399e-2ffa-45be-aed7-d4edfda643b9">
 
 
 ### References: 
