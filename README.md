@@ -26,10 +26,10 @@ cd Nhom13-DETAI23-API-DASHBOARD
 ```
 docker-compose up --build
 ```
-```
-Front-end: http://localhost:8080/
-Back-end: http://localhost:8000/docs
-```
+
+#### Front-end: http://localhost:8080/
+#### Back-end: http://localhost:8000/docs
+
 <img width="682" alt="Tiến hành chạy lệnh docker-compose" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/7488da6b-ffd6-44a2-a7b1-38a169529ee8">
 <img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/816dca65-07cd-4967-b15b-4773539e4cb3">
 <img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/2254ac5d-d299-4043-a04c-b9c023126084">
