@@ -1,4 +1,4 @@
-# api_dashboard
+# API_DASHBOARD
 
 # Hướng dẫn deploy bằng lệnh docker-compose
 ### Clone code
