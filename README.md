@@ -5,7 +5,8 @@
 ```
 git clone https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD.git
 ```
-![Uploading Screenshot 2023-05-19 at 17.15.49.png…]()
+<img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/0eddb643-bd66-4420-9356-6d18ce704b7e">
+
 
 ### Chạy **Docker desktop**
 ### Mở terminal tại thư mục chứa code
