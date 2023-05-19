@@ -1,6 +1,4 @@
 FROM node:lts-alpine
-# install simple http server for serving static content
-RUN npm install -g http-server
 # make the 'app' folder the current working directory
 WORKDIR /app
 # copy 'package.json' to install dependencies
@@ -15,3 +13,15 @@ EXPOSE 8080
 
 # CMD [ "http-server", "dist" ]
 CMD npm run serve --reload
+
+# FROM node:lts-alpine as build-stage
+
+# WORKDIR /app
+
+# COPY package*.json ./
+
+# RUN npm install
+
+# COPY . .
+
+# CMD ["npm", "run", "serve"]
