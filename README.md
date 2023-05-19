@@ -14,22 +14,22 @@ git clone https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD.git
 ```
 docker info
 ```
-<img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/4bb70fe7-2695-41d4-8899-1c4d29baa1ed">
+<img width="682" alt="Check docker" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/4bb70fe7-2695-41d4-8899-1c4d29baa1ed">
 
 ### Mở terminal tại thư mục chứa code
-<img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/043470d2-664e-4068-9c94-9bbeb0d4aada">
+<img width="682" alt="Mở terminal tại thư mục chứ code" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/043470d2-664e-4068-9c94-9bbeb0d4aada">
 
 ### Tiến hành deploy 
 ```
 docker-compose up --build
 ```
-<img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/7488da6b-ffd6-44a2-a7b1-38a169529ee8">
-
+<img width="682" alt="Tiến hành chạy lệnh docker-compose" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/7488da6b-ffd6-44a2-a7b1-38a169529ee8">
 <img width="682" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/816dca65-07cd-4967-b15b-4773539e4cb3">
 <img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/2254ac5d-d299-4043-a04c-b9c023126084">
 <img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/0fc77bdc-c27d-4a02-abfc-615939a97cd6">
 <img width="1382" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/24d2968f-4e1a-4ad7-812b-af57c2e25bed">
 <img width="1680" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/1964399e-2ffa-45be-aed7-d4edfda643b9">
+<img width="1680" alt="image" src="https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD/assets/87574012/b07e4043-067e-4aaa-9ac6-40516ed912ef">
 
 
 ### References: 
