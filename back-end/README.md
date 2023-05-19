@@ -1,6 +1,6 @@
 # api-dashboard-BackEnd
 
-### Pre: [Python3](https://www.python.org/)
+### Cài trước: [Python3](https://www.python.org/)
 
 ## Project setup
 
@@ -18,25 +18,21 @@ py -m venv env
 ### Run virtual environment
 
 #### Macos
-
 ```
 source venv/bin/activate
 ```
 
 #### Windows
-
 ```
 env/Scripts/activate
 ```
 
 ### Install libraries (in zsh terminal)
-
 ```
 pip3 install -r requirements.txt
 ```
 
 ### Run server with uvicorn
-
 ```
 uvicorn app.index:app --reload
 ```
