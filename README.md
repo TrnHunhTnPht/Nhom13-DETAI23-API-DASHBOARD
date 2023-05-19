@@ -1,6 +1,17 @@
 # api_dashboard
 
-## Check README.md intruction in "backend folder" and "frontend folder"
+# Hướng dẫn deploy bằng lệnh docker-compose
+### Clone code
+```
+git clone https://github.com/TrnHunhTnPht/Nhom13-DETAI23-API-DASHBOARD.git
+```
+### Chạy docker
+### Mở terminal tại thư mục chứa code
+### Tiến hành deploy code 
+```
+docker-compose up --build
+```
+
 
 
 ### References: 
