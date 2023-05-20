@@ -27,7 +27,7 @@ services:
       - database
 
   database:
-    image: mongo:latest
+    image: mongo
     ports:
       - 27017:27017
     
