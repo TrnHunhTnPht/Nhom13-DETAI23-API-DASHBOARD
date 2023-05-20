@@ -24,7 +24,7 @@ source venv/bin/activate
 
 #### Windows
 ```
-env/Scripts/activate
+env\Scripts\activate
 ```
 
 ### Install libraries (in zsh terminal)
