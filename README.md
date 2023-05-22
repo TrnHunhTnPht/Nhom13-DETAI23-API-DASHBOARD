@@ -1,5 +1,6 @@
 # API_DASHBOARD
 Hướng dẫn chạy project trực tiếp tại 2 file README.md trong thư mục front-end và back-end
+## Hướng dẫn deploy EC2 [video](https://youtu.be/k4ROLVROlRM)
 ## Hướng dẫn deploy bằng lệnh docker-compose
 ### Clone code
 ```
