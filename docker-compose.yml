@@ -5,12 +5,9 @@ services:
     container_name: frontend-vuejs
     build:
       context: ./front-end
-      dockerfile: Dockerfile
-    volumes:
-      - ./front-end:/app
-      - /app/node_modules  
+      dockerfile: Dockerfile 
     ports:
-      - 8080:8080
+      - 80:80
     depends_on:
       - backend
 
