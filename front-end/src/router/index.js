@@ -19,11 +19,7 @@ const routes = [
         name: 'Dashboard',
         component: () => import('../components/views/Home/Dashboard.vue')
       },
-      {
-        path: '/changepassword',
-        name: 'ChangePassword',
-        component: () => import('../components/views/Authentication/ChangePassword.vue')
-      },
+
       {
         path: '/profile',
         name: 'Profile',
@@ -61,7 +57,16 @@ const routes = [
         path: 'register',
         name: 'Signup',
         component: () => import('../components/views/Authentication/RegisterPage.vue')
-      }
+      },
+      {
+        path: 'verify-account',
+        name: 'VerifyAccount',
+        component: () => import('../components/views/Authentication/VerifyAccount.vue')
+      }, {
+        path: '/changepassword',
+        name: 'ChangePassword',
+        component: () => import('../components/views/Authentication/ChangePassword.vue')
+      },
     ]
   },
   { path: '*', component: () => import('../components/views/errors/404.vue') },

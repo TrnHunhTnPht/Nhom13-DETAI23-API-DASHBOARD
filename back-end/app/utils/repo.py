@@ -10,6 +10,8 @@ from fastapi import Request, HTTPException
 
 from app.config.config import db
 from app.schemas.user import userEntity, usersEntity
+from app.models.user import User
+
 
 
 class JWTRepo:
@@ -26,8 +28,8 @@ class JWTRepo:
 
     def decode_token(token: str):
         try:
-            decode_token = jwt.decode(token, SECRET_KEY, algorithm=[ALGORITHM])
-            return decode_token if decode_token["expires"] >= datetime.time() else None
+            decode_token = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            return decode_token 
         except:
             return {}
 
@@ -62,6 +64,7 @@ class JWTBearer(HTTPBearer):
             headers={"WWW-Authenticate": "Bearer"},
         )
         isTokenValid: bool = False
+        # print(jwttoken)
         try:
             payload = jwt.decode(jwttoken, SECRET_KEY, algorithms=[ALGORITHM])
             user = userEntity(db.find_one({"email": payload.get("email")}))

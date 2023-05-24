@@ -5,11 +5,25 @@ from app.config.config import db
 from app.schemas.user import userEntity, usersEntity
 from app.utils.utils import get_hashed_password, verify_password
 from app.utils.repo import JWTRepo, JWTBearer, JWTBearerAdmin
+from app.utils.MailService import sendOTP
 from bson import ObjectId
 from datetime import datetime, date
+import random
+import re
 
 app_router = APIRouter()
 
+
+def generate_numeric_otp(length):
+    otp = ""
+    for _ in range(length):
+        digit = random.randint(0, 9)
+        otp += str(digit)
+    return otp
+
+def validate_password(password):
+    regex = r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&+=])\S{8,}$"
+    return re.match(regex, password) is not None
 
 @app_router.get("/")
 async def main():
@@ -68,7 +82,7 @@ async def register(user: User):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Can't create account"
         )
-    elif user.email.lower() == "" or user.password == "":
+    elif user.email.lower() == "" or user.password == "" or validate_password(user.password)==False:
         raise HTTPException(status_code=406, detail="Not Acceptable")
     else:
         user.password = get_hashed_password(user.password)
@@ -109,7 +123,7 @@ async def update_user(id: str, user: User):
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Can't update account",
                 )
-        if user.password == "":
+        if user.password == "" or validate_password(user.password)==False:
             user.password = findUser["password"]
         else:
             user.password = get_hashed_password(user.password)
@@ -151,42 +165,116 @@ async def delete_user(id: str):
 async def user_login(user: User):
     result = userEntity(db.find_one({"email": str(user.email.lower())}))
 
-    if not verify_password(user.password, result["password"]):
-        raise HTTPException(
-            status_code=401, detail="Incorrect email or password")
+    if (result):
+        if not verify_password(user.password, result["password"]):
+            raise HTTPException(
+                status_code=401, detail="Incorrect email or password")
 
-    acc = result["accessed_at"]
-    length = len(acc)
+        acc = result["accessed_at"]
+        length = len(acc)
 
-    if length > 0:
-        if acc[length - 1].date() != date.today():
+        if length > 0:
+            if acc[length - 1].date() != date.today():
+                result["accessed_at"].append(datetime.now())
+        else:
             result["accessed_at"].append(datetime.now())
-            db.find_one_and_update(
-                {"_id": ObjectId(result["id"])}, {"$set": dict(result)}
-            )
-    else:
-        result["accessed_at"].append(datetime.now())
+
         db.find_one_and_update(
             {"_id": ObjectId(result["id"])}, {"$set": dict(result)}
         )
 
-    if result["status"] == 1:
-        print(user.password)
-        token = JWTRepo.generate_token(
-            {"email": result["email"], "role": result["role"]}
-        )
-        return {
-            "data": {
-                "id": result["id"],
-                "email": result["email"],
-                "role": result["role"],
-            },
-            "access_token": token,
-            "token_type": "Bearer",
-        }
+        if result["status"] == 1:
+            token = JWTRepo.generate_token(
+                {"email": result["email"], "role": result["role"]}
+            )
+            return {
+                "data": {
+                    "id": result["id"],
+                    "email": result["email"],
+                    "role": result["role"],
+                },
+                "access_token": token,
+                "token_type": "Bearer",
+            }
+
+        raise HTTPException(
+            status_code=307, detail="Account's not verified")
     else:
         raise HTTPException(
             status_code=404, detail="Account's been deleted")
+
+
+@app_router.get("/send_otp")
+async def send_OTP(email: str):
+    result = userEntity(db.find_one({"email": str(email.lower())}))
+    if result:
+        otp = generate_numeric_otp(6)
+        result["code"] = otp
+        result["code_created_at"] = datetime.now()
+        sendOTP(str(email.lower()), otp)
+        db.find_one_and_update(
+            {"_id": ObjectId(result["id"])}, {"$set": dict(result)}
+        )
+    else:
+        raise HTTPException(
+            status_code=404, detail="Account's been deleted")
+
+
+@app_router.post("/user/verify_account")
+async def verify_account(user: User):
+    findUser = userEntity(db.find_one({"email": str(user.email.lower())}))
+    if findUser:
+        if findUser["code"] == user.code and abs(datetime.now() - findUser["code_created_at"]).seconds <= 3000:
+            if findUser["status"] == 1:
+                token = JWTRepo.generate_token(
+                    {"email": findUser["email"], "role": findUser["role"]}
+                )
+                raise HTTPException(status_code=307, detail={"access_token": token,
+                                                             "token_type": "Bearer", })
+            else:
+                findUser["status"] = 1
+                db.find_one_and_update(
+                    {"_id": ObjectId(findUser["id"])}, {"$set": dict(findUser)}
+                )
+
+                return {
+                    "data": {
+                        "id": findUser["id"],
+                        "email": findUser["email"],
+                        "role": findUser["role"],
+                    }
+                }
+        else:
+            otp = generate_numeric_otp(6)
+            findUser["code"] = otp
+            findUser["code_created_at"] = datetime.now()
+            sendOTP(str(user.email.lower()), otp)
+            db.find_one_and_update(
+                {"_id": ObjectId(findUser["id"])}, {"$set": dict(findUser)}
+            )
+            raise HTTPException(status_code=406, detail="Not Acceptable")
+
+    else:
+        raise HTTPException(
+            status_code=404, detail="Not found")
+
+
+@app_router.put("/change_password", dependencies=[Depends(JWTBearer())])
+async def change_password(user: User, token: str = Depends(JWTBearer())):
+    currentUser = userEntity(db.find_one(
+        {"email": JWTRepo.decode_token(token).get("email")}))
+    findUser = userEntity(db.find_one({"email": str(user.email.lower())}))
+    if currentUser["email"]==findUser["email"] and validate_password(user.password):
+        if findUser:
+            if findUser["role"] != 0:
+                findUser["password"] = get_hashed_password(user.password)
+                db.find_one_and_update(
+                    {"_id": ObjectId(findUser["id"])}, {"$set": dict(findUser)}
+                )
+            else:
+                raise HTTPException(status_code=406, detail="Not Acceptable")     
+    else:
+        raise HTTPException(status_code=406, detail="Not Acceptable")
 
 
 @app_router.get("/new-clients", dependencies=[Depends(JWTBearerAdmin())])
@@ -217,7 +305,7 @@ async def new_clients():
         "newClients": (format(newClientsThisQuarter, ",d")),
         "percent": pc,
     }
-    
+
 
 @app_router.get("/today-users", dependencies=[Depends(JWTBearerAdmin())])
 async def today_users():
@@ -248,5 +336,3 @@ async def today_users():
         "percent": pc,
         "total": total,
     }
-
-
