@@ -166,6 +166,8 @@
                 maxlength="1"
               />
             </div>
+            <span id="messError"></span>
+
             <button @click.prevent="handleUpdate">Update</button>
           </div>
         </div>
@@ -284,6 +286,12 @@ export default {
           if (res.status == 200) {
             document.getElementById("inputStatus").value = "";
             this.currentUser = "Undefined";
+          }
+        })
+        .catch((ex) => {
+          if (ex.response.status == 401 || ex.response.status == 409) {
+            document.getElementById("messError").innerHTML =
+              ex.response.data.detail;
           }
         });
     },

@@ -382,10 +382,10 @@ export default {
           return -this.sortOrderPa;
         })
         .filter((row) => {
-          if (this.keySearch != "") {
+          if (this.keySearch.toLowerCase() != "") {
             if (this.keySearch.includes("%"))
-              return row.state_ok == this.keySearch.replace("%", "");
-            return row.id.includes(this.keySearch);
+              return row.state_ok == this.keySearch.toLowerCase().replace("%", "");
+            return row.id.includes(this.keySearch.toLowerCase());
           }
           return true;
         })
