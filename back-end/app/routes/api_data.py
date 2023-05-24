@@ -95,35 +95,35 @@ async def get_inspection_detail(id: str):
         raise HTTPException(status_code=500)
 
 
-@app_router.post("/upload-avatar", dependencies=[Depends(JWTBearer())])
-async def upload_avatar(file: UploadFile, id: str):
-    allowedFiles = {
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/tiff",
-        "image/bmp",
-        "video/webm",
-    }
-    if file.content_type in allowedFiles:
-        user = userEntity(db.find_one({"_id": ObjectId(id)}))
-        try:
-            contents = base64.b64encode(file.file.read())
-            # with open("uploaded_" + file.filename, "wb") as f:
-            #     f.write(contents)
+# @app_router.post("/upload-avatar", dependencies=[Depends(JWTBearer())])
+# async def upload_avatar(file: UploadFile, id: str):
+    # allowedFiles = {
+    #     "image/jpeg",
+    #     "image/png",
+    #     "image/gif",
+    #     "image/tiff",
+    #     "image/bmp",
+    #     "video/webm",
+    # }
+    # if file.content_type in allowedFiles:
+    #     user = userEntity(db.find_one({"_id": ObjectId(id)}))
+    #     try:
+    #         contents = base64.b64encode(file.file.read())
+    #         # with open("uploaded_" + file.filename, "wb") as f:
+    #         #     f.write(contents)
 
-            # print(contents)
+    #         # print(contents)
 
-            # user["image"] = contents
-            # db.find_one_and_update({"_id": ObjectId(id)}, {"$set": dict(user)})
+    #         # user["image"] = contents
+    #         # db.find_one_and_update({"_id": ObjectId(id)}, {"$set": dict(user)})
 
-        except Exception:
-            return {"message": "There was an error uploading the file"}
-        finally:
-            file.file.close()
+    #     except Exception:
+    #         return {"message": "There was an error uploading the file"}
+    #     finally:
+    #         file.file.close()
 
-        return {"message": f"Successfuly uploaded {file.filename}"}
-    raise HTTPException(status_code=415, detail="Unsupported Media Type")
+    #     return {"message": f"Successfuly uploaded {file.filename}"}
+    # raise HTTPException(status_code=415, detail="Unsupported Media Type")
 
 
 @app_router.get("/download_api_data", dependencies=[Depends(JWTBearer())])
