@@ -1,10 +1,19 @@
 <template>
   <div>
-    <Navbar />
     <div class="changepassword">
       <div class="contain-input">
-        <input type="password" :placeholder="this.label.pw" id="inputPW" required/>
-        <input type="password" :placeholder="this.label.cpw" id="inputPW2" required/>
+        <input
+          type="password"
+          :placeholder="this.label.pw"
+          id="inputPW"
+          required
+        />
+        <input
+          type="password"
+          :placeholder="this.label.cpw"
+          id="inputPW2"
+          required
+        />
         <span id="notify-error"></span>
         <button @click.prevent="handleChange">Change</button>
       </div>
@@ -13,8 +22,7 @@
 </template>
 <script>
 import axios from "axios";
-import Navbar from "../../AppNav.vue";
-import { UPDATE_DELETE_USER } from "../../../axios";
+import { UPDATE_PASSWORD } from "../../../axios";
 
 export default {
   name: "ChangePassword",
@@ -27,14 +35,9 @@ export default {
       email: localStorage.getItem("email"),
     };
   },
-  components: {
-    Navbar,
-  },
+  components: {},
   mounted() {
-    if (
-      localStorage.getItem("id") == null ||
-      localStorage.getItem("access_token") == null
-    ) {
+    if (localStorage.getItem("access_token") == null) {
       this.$router.push({ name: "Signin" });
     }
   },
@@ -46,19 +49,35 @@ export default {
       var pw = document.getElementById("inputPW").value;
       var pw2 = document.getElementById("inputPW2").value;
 
-      if (pw == pw2 && pw!="") {
-        await axios.put(UPDATE_DELETE_USER + "/" + localStorage.getItem("id"), {
-          password: pw,
-        });
+      if (pw == pw2 && pw != "") {
+        const regex =
+          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&*()_+!])(?=.*[a-zA-Z\d@#$%^&*()_+!]).{8,}$/;
+        if (regex.test(pw)) {
+          await axios
+            .put(UPDATE_PASSWORD, {
+              email: localStorage.getItem("email"),
+              password: pw,
+            })
+            .then((res) => {
+              if (res.status == 200) {
+                this.$router.push({ name: "Profile" });
+              }
+            })
+            .catch((ex) => {
+              if (ex.response.status == 401) {
+                this.$router.push({ name: "Signin" });
+              }
+            });
+        } else {
+          document.getElementById("notify-error").innerHTML =
+            "Invalid password";
+        }
+      } else if (pw != " ") {
+        document.getElementById("notify-error").innerHTML = "Enter password";
+      } else {
+        document.getElementById("notify-error").innerHTML =
+          "Password do NOT match!";
       }
-      else if(pw!=" "){
-        document.getElementById("notify-error").innerHTML="Enter password"
-
-      }
-      else{
-        document.getElementById("notify-error").innerHTML="Password do NOT match!"
-      }
-      this.$router.push({name:"Profile"})
     },
   },
 };

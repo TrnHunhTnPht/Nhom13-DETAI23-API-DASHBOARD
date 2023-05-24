@@ -30,7 +30,7 @@
           <div class="forgotpassword">
             <div
               @click="handleForgotPW"
-              style="font-style: italic; cursor: pointer;"
+              style="font-style: italic; cursor: pointer"
             >
               Forgot password?
             </div>
@@ -59,6 +59,7 @@
 <script>
 import axios from "axios";
 import { LOGIN } from "@/axios";
+import { SENDOTP } from "../../../axios";
 
 export default {
   name: "LoginPage",
@@ -90,20 +91,44 @@ export default {
           }
         })
         .catch((ex) => {
-          console.log(ex);
-          if (ex.response.status == 401) {
-            document.getElementById("messError").innerHTML =
-              "Email or password is invalid!";
-          }
-          if (ex.response.status == 404) {
-            document.getElementById("messError").innerHTML =
-              "Account's been deleted. Contact us to restore!";
+          try {
+            if (ex.response.status == 307) {
+              axios
+                .get(SENDOTP, { params: { email: this.email.trim() } })
+                .then((res) => {
+                  if (res.status == 200) {
+                    localStorage.setItem("email", this.email);
+                    this.$router.push({ name: "VerifyAccount" });
+                  }
+                })
+                .catch((ex) => {
+                  console.log(ex);
+                });
+            } else {
+              document.getElementById("messError").innerHTML =
+                ex.response.data.detail;
+            }
+          } catch (err) {
+            document.getElementById("messError").innerHTML = "Error";
           }
         });
     },
-    handleForgotPW() {
-      console.log("a");
-      alert("Contact us to reset password");
+    async handleForgotPW() {
+      if (this.email.trim() == "") {
+        alert("Fill your email, please!");
+      } else {
+        await axios
+          .get(SENDOTP, { params: { email: this.email.trim() } })
+          .then((res) => {
+            if (res.status == 200) {
+              localStorage.setItem("email", this.email);
+              this.$router.push({ name: "VerifyAccount" });
+            }
+          })
+          .catch((ex) => {
+            console.log(ex);
+          });
+      }
     },
     handleHome() {
       this.$router.push({ name: "Introduction" });
