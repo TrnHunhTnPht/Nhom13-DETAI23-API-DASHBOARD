@@ -8,7 +8,7 @@ from fastapi import Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Request, HTTPException
 
-from app.config.config import db
+from app.config.config import collection
 from app.schemas.user import userEntity, usersEntity
 from app.models.user import User
 
@@ -67,7 +67,7 @@ class JWTBearer(HTTPBearer):
         # print(jwttoken)
         try:
             payload = jwt.decode(jwttoken, SECRET_KEY, algorithms=[ALGORITHM])
-            user = userEntity(db.find_one({"email": payload.get("email")}))
+            user = userEntity(collection.find_one({"email": payload.get("email")}))
         except JWTError:
             raise credentials_exception
 
@@ -111,7 +111,7 @@ class JWTBearerAdmin(HTTPBearer):
         isTokenValid: bool = False
         try:
             payload = jwt.decode(jwttoken, SECRET_KEY, algorithms=[ALGORITHM])
-            user = userEntity(db.find_one({"email": payload.get("email")}))
+            user = userEntity(collection.find_one({"email": payload.get("email")}))
         except JWTError:
             raise credentials_exception
 

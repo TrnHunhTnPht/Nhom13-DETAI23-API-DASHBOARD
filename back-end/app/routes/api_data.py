@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 from app.utils.utils import get_hashed_password, verify_password
 from app.utils.repo import JWTRepo, JWTBearer, JWTBearerAdmin
 
-from app.config.config import db
+from app.config.config import collection
 from app.schemas.user import userEntity, usersEntity
 from app.main_data.getData import times, stateOk, inspection, data
 

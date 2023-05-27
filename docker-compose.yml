@@ -8,8 +8,12 @@ services:
       dockerfile: Dockerfile 
     ports:
       - 80:80
+    networks:
+      - webapp-network
     depends_on:
       - backend
+    links:
+      - database
 
   backend:
     container_name: backend-python
@@ -20,14 +24,30 @@ services:
       - ./back-end:/app
     ports:
       - 8000:8000
+    networks:
+      - webapp-network
     depends_on:
+      - database
+    links:
       - database
 
   database:
+    container_name: mongodb
     image: mongo
+    volumes:
+      - ./data:/data/db
     ports:
-      - 27017:27017
-    
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dbAPIDashboard
+      - MONGO_INITDB_ROOT_PASSWORD=dbAPIDashboard
+      - MONGO_INITDB_DATABASE=api_dashboard_application
+    networks:
+      - webapp-network
+networks:
+  webapp-network:
+    driver: bridge
+
 # version: '3'
 
 # services:
@@ -37,8 +57,12 @@ services:
 #     ports:
 #       - 80:80
 #     restart: unless-stopped
+#     networks:
+#       - webapp-network
 #     depends_on:
 #       - backend
+#     links:
+#       - database
 
 #   backend:
 #     image: tranhuynhtanphat/backend-image:v1
@@ -46,5 +70,26 @@ services:
 #     ports:
 #       - 8000:8000
 #     restart: unless-stopped
-
+#     networks:
+#       - webapp-network
+#     depends_on:
+#       - database
+#     links:
+#       - database
   
+#   database:
+#     container_name: mongodb
+#     image: mongo
+#     volumes:
+#       - ./data:/data/db
+#     ports:
+#       - "27017:27017"
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=dbAPIDashboard
+#       - MONGO_INITDB_ROOT_PASSWORD=dbAPIDashboard
+#       - MONGO_INITDB_DATABASE=api_dashboard_application
+#     networks:
+#       - webapp-network
+# networks:
+#   webapp-network:
+#     driver: bridge
