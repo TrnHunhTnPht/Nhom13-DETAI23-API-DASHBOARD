@@ -28,7 +28,7 @@ def validate_password(password):
 @app_router.get("/")
 async def main():
     
-    return {"message": usersEntity(collection.find())}
+    return {"message": "Hello"}
 
 
 # RETRIEVE ALL ACCOUNT
